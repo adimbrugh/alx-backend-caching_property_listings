@@ -134,9 +134,9 @@ import os
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'propertydb'),
-        'USER': os.getenv('POSTGRES_USER', 'propertyuser'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'propertypass'),
+        'NAME': os.getenv('POSTGRES_DB', 'property_db'),
+        'USER': os.getenv('POSTGRES_USER', 'property_user'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'property_pass'),
         'HOST': 'db',  # inside Docker network, use 'postgres'
         'PORT': '5432',
     }
@@ -145,7 +145,7 @@ DATABASES = {
 # Redis Cache configuration
 CACHES = {
     "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/1",  # inside Docker network, use 'redis://redis:6379/1'
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
