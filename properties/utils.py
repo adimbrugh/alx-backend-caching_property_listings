@@ -23,32 +23,33 @@ def get_all_properties():
 
 
 
-import logging
-from django_redis import get_redis_connection
 
 logger = logging.getLogger(__name__)
 
 def get_redis_cache_metrics():
     """
     Retrieves Redis cache hit/miss metrics and calculates hit ratio.
-    Logs the metrics and returns them as a dictionary.
+    Returns a dictionary with the metrics.
     """
-    redis_conn = get_redis_connection("default")
-    info = redis_conn.info("stats")
+    try:
+        redis_conn = get_redis_connection("default")
+        info = redis_conn.info("stats")
 
-    hits = info.get("keyspace_hits", 0)
-    misses = info.get("keyspace_misses", 0)
-    total_requests = hits + misses
+        hits = info.get("keyspace_hits", 0)
+        misses = info.get("keyspace_misses", 0)
+        total_requests = hits + misses
 
-    hit_ratio = hits / total_requests if total_requests > 0 else 0
+        hit_ratio = hits / total_requests if total_requests > 0 else 0
 
-    metrics = {
-        "hits": hits,
-        "misses": misses,
-        "hit_ratio": round(hit_ratio, 2),
-    }
+        metrics = {
+            "hits": hits,
+            "misses": misses,
+            "hit_ratio": round(hit_ratio, 2),
+        }
 
-    # Log at INFO level (not error)
-    logger.info(f"Redis Cache Metrics: {metrics}")
+        logger.info(f"Redis Cache Metrics: {metrics}")
+        return metrics
 
-    return metrics
+    except Exception as e:
+        logger.error(f"Error retrieving Redis cache metrics: {e}")
+        return {"hits": 0, "misses": 0, "hit_ratio": 0}
