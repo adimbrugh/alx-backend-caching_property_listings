@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.views.decorators.cache import cache_page
-from .utils import get_all_properties
+from .utils import get_all_properties, get_ridis_cache_metrics
 from django.http import JsonResponse
 #from .models import Property
 
@@ -14,6 +14,12 @@ from django.http import JsonResponse
 def property_list(request):
     properties = get_all_properties()
     return JsonResponse({"data": properties})
+
+
+
+def cache_metrics(request):
+    metrics = get_ridis_cache_metrics()
+    return JsonResponse(metrics)
 
 
 
